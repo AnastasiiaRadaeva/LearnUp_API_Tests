@@ -48,7 +48,7 @@ public class CategoryTests {
                 .log()
                 .body()
                 .when()
-                .get("/categories/1")
+                .get(CATEGORY_ENDPOINT, 1)
                 .prettyPeek()
                 .then()
                 .statusCode(200);
@@ -65,7 +65,7 @@ public class CategoryTests {
                 .log()
                 .body()
                 .when()
-                .get("/categories/1")
+                .get(CATEGORY_ENDPOINT, 1)
                 .prettyPeek()
                 .then()
                 .statusCode(200)
@@ -84,7 +84,7 @@ public class CategoryTests {
                 .log()
                 .body()
                 .when()
-                .get("/categories/1")
+                .get(CATEGORY_ENDPOINT, 1)
                 .prettyPeek();
         assertThat(response.statusCode(), equalTo(200));
         assertThat(response.body().jsonPath().get("products[0].categoryTitle"), equalTo("Food"));
