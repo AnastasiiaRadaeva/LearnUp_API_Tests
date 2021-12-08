@@ -108,7 +108,6 @@ public class GetProductTests {
                 .body("error", equalTo("Bad Request"));
     }
 
-    //1 баг - считаю, что это bad request
     @Test
     void getProductNegativeIdIsNegativeTest() {
         given()
@@ -122,7 +121,7 @@ public class GetProductTests {
                 .log()
                 .body()
                 .when()
-                .get(PRODUCT_ENDPOINT, -1)
+                .get(PRODUCT_ENDPOINT, "-1")
                 .prettyPeek()
                 .then()
                 .statusCode(400)

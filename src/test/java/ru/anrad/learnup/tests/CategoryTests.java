@@ -23,6 +23,7 @@ public class CategoryTests {
     public static final String CATEGORY_ENDPOINT="categories/{id}";
     static Properties properties = new Properties();
 
+
     @BeforeAll
     static void setUp() throws IOException {
         properties.load(new FileInputStream("src/test/resources/application.properties"));
