@@ -1,28 +1,27 @@
 package ru.anrad.learnup.tests;
 
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.anrad.learnup.dto.Product;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static ru.anrad.learnup.enams.ProductList.BANANA;
 
 public class GetProductTests {
-    public static final String PRODUCT_ENDPOINT="products/{id}";
+    public static final String PRODUCT_ENDPOINT = "products/{id}";
     static Properties properties = new Properties();
 
     @BeforeAll
     static void setUp() throws IOException {
         properties.load(new FileInputStream("src/test/resources/application.properties"));
-        RestAssured.baseURI = properties.getProperty("baseURL");;
+        RestAssured.baseURI = properties.getProperty("baseURL");
     }
 
     @Test
@@ -46,7 +45,7 @@ public class GetProductTests {
 
     @Test
     void getProductPositiveTest() {
-        given()
+        Product response = given()
                 .when()
                 .log()
                 .method()
@@ -56,16 +55,19 @@ public class GetProductTests {
                 .headers()
                 .log()
                 .body()
-                .when()
-                .get(PRODUCT_ENDPOINT, 17563)
-                .prettyPeek()
-                .then()
+                .expect()
                 .statusCode(200)
-                .body("id", equalTo(17563))
-                .body("title", equalTo("Bread"))
-                .body("price", equalTo(100))
-                .body("categoryTitle", equalTo("Food"));
+                .when()
+                .get(PRODUCT_ENDPOINT, BANANA.getId())
+                .prettyPeek()
+                .body()
+                .as(Product.class);
+        assertThat(response.getId(), equalTo(BANANA.getId()));
+        assertThat(response.getTitle(), equalTo(BANANA.getTitle()));
+        assertThat(response.getPrice(), equalTo(BANANA.getPrice()));
+        assertThat(response.getCategoryTitle(), equalTo(BANANA.getCategory()));
     }
+
     @Test
     void getProductNegativeIdIsNotExistedTest() {
         given()

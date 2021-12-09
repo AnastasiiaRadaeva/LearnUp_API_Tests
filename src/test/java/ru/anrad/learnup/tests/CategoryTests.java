@@ -1,46 +1,33 @@
 package ru.anrad.learnup.tests;
 
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-import org.hamcrest.CoreMatchers;
+
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.LoggerFactory;
-import org.slf4j.spi.LoggerFactoryBinder;
+import ru.anrad.learnup.dto.Category;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static ru.anrad.learnup.enams.CategoryType.FOOD;
 
 public class CategoryTests {
-    public static final String CATEGORY_ENDPOINT="categories/{id}";
+    public static final String CATEGORY_ENDPOINT = "categories/{id}";
     static Properties properties = new Properties();
-
 
     @BeforeAll
     static void setUp() throws IOException {
         properties.load(new FileInputStream("src/test/resources/application.properties"));
-        RestAssured.baseURI = properties.getProperty("baseURL");;
+        RestAssured.baseURI = properties.getProperty("baseURL");
     }
 
     @Test
-    void getCategoryTest() {
-        given()
-                .when()
-                .get(CATEGORY_ENDPOINT, 1)
-                .then()
-                .statusCode(200);
-    }
-    @Test
-    void getCategoryWithLogsTest() {
-        given()
+    void getCategoryPositiveIdIsExistsTest() {
+        Category response = given()
                 .when()
                 .log()
                 .method()
@@ -48,35 +35,22 @@ public class CategoryTests {
                 .uri()
                 .log()
                 .body()
-                .when()
-                .get(CATEGORY_ENDPOINT, 1)
-                .prettyPeek()
-                .then()
-                .statusCode(200);
-    }
-
-    @Test
-    void getCategoryWithAssertsTest() {
-        given()
-                .when()
-                .log()
-                .method()
-                .log()
-                .uri()
-                .log()
-                .body()
-                .when()
-                .get(CATEGORY_ENDPOINT, 1)
-                .prettyPeek()
-                .then()
+                .expect()
                 .statusCode(200)
-                .body("id", equalTo(1));
-//        assertThat(validatableResponse.body("id", equalTo(1)), is(true));
+                .when()
+                .get(CATEGORY_ENDPOINT, FOOD.getId())
+                .prettyPeek()
+                .body().as(Category.class);
+        assertThat(response.getId(), equalTo(FOOD.getId()));
+        assertThat(response.getTitle(), equalTo(FOOD.getName()));
+        response.getProducts().forEach(
+                e -> assertThat(e.getCategoryTitle(), equalTo(FOOD.getName()))
+        );
     }
 
     @Test
-    void getCategoryWithAssertsForResponseTest() {
-        Response response = given()
+    void getCategoryNegativeIdIsEmptyTest() {
+        given()
                 .when()
                 .log()
                 .method()
@@ -84,10 +58,78 @@ public class CategoryTests {
                 .uri()
                 .log()
                 .body()
+                .expect()
+                .statusCode(400)
                 .when()
-                .get(CATEGORY_ENDPOINT, 1)
+                .get(CATEGORY_ENDPOINT, "")
                 .prettyPeek();
-        assertThat(response.statusCode(), equalTo(200));
-        assertThat(response.body().jsonPath().get("products[0].categoryTitle"), equalTo("Food"));
+    }
+
+    @Test
+    void getCategoryNegativeIdIsNegativeTest() {
+        given()
+                .when()
+                .log()
+                .method()
+                .log()
+                .uri()
+                .log()
+                .body()
+                .expect()
+                .statusCode(400)
+                .when()
+                .get(CATEGORY_ENDPOINT, -7)
+                .prettyPeek();
+    }
+
+    @Test
+    void getCategoryNegativeIdIsFractPointTest() {
+        given()
+                .when()
+                .log()
+                .method()
+                .log()
+                .uri()
+                .log()
+                .body()
+                .expect()
+                .statusCode(400)
+                .when()
+                .get(CATEGORY_ENDPOINT, 8.9)
+                .prettyPeek();
+    }
+
+    @Test
+    void getCategoryNegativeIdIsFractCommaTest() {
+        given()
+                .when()
+                .log()
+                .method()
+                .log()
+                .uri()
+                .log()
+                .body()
+                .expect()
+                .statusCode(400)
+                .when()
+                .get(CATEGORY_ENDPOINT, "8,9")
+                .prettyPeek();
+    }
+
+    @Test
+    void getCategoryNegativeIdIsLettersTest() {
+        given()
+                .when()
+                .log()
+                .method()
+                .log()
+                .uri()
+                .log()
+                .body()
+                .expect()
+                .statusCode(400)
+                .when()
+                .get(CATEGORY_ENDPOINT, "one")
+                .prettyPeek();
     }
 }

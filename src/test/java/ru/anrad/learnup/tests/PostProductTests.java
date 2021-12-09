@@ -1,5 +1,6 @@
 package ru.anrad.learnup.tests;
 
+import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.*;
 import ru.anrad.learnup.dto.Product;
@@ -10,11 +11,14 @@ import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class PostProductTests {
-    public static final String PRODUCT_ENDPOINT="products";
+    public static final String PRODUCT_ENDPOINT = "products";
     static Properties properties = new Properties();
 
+    Faker faker = new Faker();
     static Product product;
     Integer id;
 
@@ -25,10 +29,10 @@ public class PostProductTests {
     }
 
     @BeforeEach
-    void init_product(){
+    void init_product() {
         product = Product.builder()
-                .price(100)
-                .title("Banana")
+                .price(150)
+                .title(faker.food().dish())
                 .categoryTitle("Food")
                 .id(null)
                 .build();
@@ -36,15 +40,13 @@ public class PostProductTests {
 
     @Test
     void postProductPositiveTest() {
-        id = given()
-                .body(product.toString())
+        Product response = given()
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -52,8 +54,13 @@ public class PostProductTests {
                 .when()
                 .post(PRODUCT_ENDPOINT)
                 .prettyPeek()
-                .jsonPath()
-                .get("id");
+                .body()
+                .as(Product.class);
+        id = response.getId();
+        assertThat(response.getId(), is(not(nullValue())));
+        assertThat(response.getTitle(), equalTo(product.getTitle()));
+        assertThat(response.getPrice(), equalTo(product.getPrice()));
+        assertThat(response.getCategoryTitle(), equalTo(product.getCategoryTitle()));
     }
 
     @Test
@@ -66,8 +73,6 @@ public class PostProductTests {
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -83,14 +88,12 @@ public class PostProductTests {
         product.setId(6);
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -107,14 +110,12 @@ public class PostProductTests {
         product.setTitle(null);
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -131,14 +132,12 @@ public class PostProductTests {
         product.setTitle("");
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -155,14 +154,12 @@ public class PostProductTests {
         product.setPrice(null);
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -179,14 +176,12 @@ public class PostProductTests {
         product.setPrice(-50);
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -203,14 +198,12 @@ public class PostProductTests {
         product.setCategoryTitle(null);
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
                 .log()
                 .uri()
-                .log()
-                .headers()
                 .log()
                 .body()
                 .expect()
@@ -227,7 +220,7 @@ public class PostProductTests {
         product.setCategoryTitle("jhg");
 
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("Content-Type", "application/json")
                 .log()
                 .method()
@@ -248,7 +241,7 @@ public class PostProductTests {
 
     @AfterEach
     void tearDown(TestInfo testInfo) {
-        if(testInfo.getTags().contains("SkipCleanup")) {
+        if (testInfo.getTags().contains("SkipCleanup")) {
             return;
         }
 
