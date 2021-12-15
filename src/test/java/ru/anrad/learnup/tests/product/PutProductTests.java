@@ -8,35 +8,29 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static ru.anrad.learnup.Endpoints.*;
-import static ru.anrad.learnup.enams.ProductList.NEW_PRODUCT;
+import static ru.anrad.learnup.enams.ProductList.CHANGED_BREAD;
 
-import com.github.javafaker.Faker;
-
-
-public class PostProductTests extends BaseTests {
-    Faker faker = new Faker();
+public class PutProductTests extends BaseTests {
     static Product product;
     Integer id;
 
     @BeforeEach
     void init_product() {
         product = Product.builder()
-                .price(NEW_PRODUCT.getPrice())
-                .title(faker.food().dish())
-                .categoryTitle(NEW_PRODUCT.getCategory())
-                .id(null)
+                .id(CHANGED_BREAD.getId())
+                .price(CHANGED_BREAD.getPrice())
+                .title(CHANGED_BREAD.getTitle())
+                .categoryTitle(CHANGED_BREAD.getCategory())
                 .build();
     }
 
     @Test
-    void postProductPositiveTest() {
+    void putProductPositiveTest() {
         Product response = given()
                 .body(product)
                 .header(HEADER_CT_NAME, HEADER_CT)
-                .response()
-                .spec(createdResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .body()
                 .as(Product.class);
@@ -48,19 +42,19 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
-    void postProductNegativeProductIsWrongStructureTest() {
+    void putProductNegativeProductIsWrongStructureTest() {
         given()
                 .body(LETTERS_STRING)
                 .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek();
     }
 
     @Test
-    void postProductNegativeIdIsNotNullTest() {
+    void putProductNegativeIdIsNotExistTest() {
         product.setId(POSITIVE_NUM);
         id = given()
                 .body(product)
@@ -68,14 +62,14 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @Test
-    void postProductNegativeTitleIsNullTest() {
+    void putProductNegativeTitleIsNullTest() {
         product.setTitle(null);
 
         id = given()
@@ -84,14 +78,14 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @Test
-    void postProductNegativeTitleIsEmptyTest() {
+    void putProductNegativeTitleIsEmptyTest() {
         product.setTitle(EMPTY_STRING);
 
         id = given()
@@ -100,14 +94,14 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @Test
-    void postProductNegativePriceIsNullTest() {
+    void putProductNegativePriceIsNullTest() {
         product.setPrice(null);
 
         id = given()
@@ -116,14 +110,14 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @Test
-    void postProductNegativePriceIsNegativeTest() {
+    void putProductNegativePriceIsNegativeTest() {
         product.setPrice(NEGATIVE_NUM);
 
         id = given()
@@ -132,14 +126,14 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @Test
-    void postProductNegativeCategoryIsNullTest() {
+    void putProductNegativeCategoryIsNullTest() {
         product.setCategoryTitle(null);
 
         id = given()
@@ -148,14 +142,14 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @Test
-    void postProductNegativeCategoryIsNotExistTest() {
+    void putProductNegativeCategoryIsNotExistTest() {
         product.setCategoryTitle(LETTERS_STRING);
 
         id = given()
@@ -164,20 +158,18 @@ public class PostProductTests extends BaseTests {
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
-                .post(POST_PRODUCT_ENDPOINT)
+                .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
     }
 
     @AfterEach
-    void tearDown(TestInfo testInfo) {
+    void checkProduct(TestInfo testInfo) {
         if (id != null) {
             given()
-                    .response()
-                    .spec(deleteResponseSpecification)
                     .when()
-                    .delete(GET_PRODUCT_ENDPOINT, id)
+                    .get(GET_PRODUCT_ENDPOINT, id)
                     .prettyPeek();
         }
     }
