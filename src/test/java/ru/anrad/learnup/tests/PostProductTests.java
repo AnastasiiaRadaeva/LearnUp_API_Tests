@@ -1,6 +1,7 @@
 package ru.anrad.learnup.tests;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import ru.anrad.learnup.dto.Product;
 
@@ -35,7 +36,7 @@ public class PostProductTests {
     }
 
     @Test
-    void postProductPositiveTest() {
+    void postProductPositiveTestFirst() {
         id = given()
                 .body(product.toString())
                 .header("Content-Type", "application/json")
@@ -57,7 +58,30 @@ public class PostProductTests {
     }
 
     @Test
-    @Tag("SkipCleanup")
+    void postProductPositiveTestSecond() {
+        product.setCategoryTitle("Electronic");
+        product.setTitle("Iron");
+        id = given()
+                .body(product.toString())
+                .header("Content-Type", "application/json")
+                .log()
+                .method()
+                .log()
+                .uri()
+                .log()
+                .headers()
+                .log()
+                .body()
+                .expect()
+                .statusCode(201)
+                .when()
+                .post(PRODUCT_ENDPOINT)
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
     void postProductNegativeProductIsWrongStructureTest() {
         given()
                 .body("string")
@@ -78,7 +102,28 @@ public class PostProductTests {
     }
 
     @Test
-    @Tag("SkipCleanup")
+    void postProductNegativeProductIsWrongStructureXSSTest() {
+        given()
+                .body("<script>alert(Hello, World!)</script>")
+                .header("Content-Type", "application/json")
+                .log()
+                .method()
+                .log()
+                .uri()
+                .log()
+                .headers()
+                .log()
+                .body()
+                .expect()
+                .statusCode(400)
+                .when()
+                .post(PRODUCT_ENDPOINT)
+                .prettyPeek()
+                .then()
+                .contentType(ContentType.JSON);
+    }
+
+    @Test
     void postProductNegativeIdIsNotNullTest() {
         product.setId(6);
 
@@ -248,14 +293,12 @@ public class PostProductTests {
 
     @AfterEach
     void tearDown(TestInfo testInfo) {
-        if(testInfo.getTags().contains("SkipCleanup")) {
-            return;
+        if (id != null) {
+            when()
+                    .delete("products/{id}", id)
+                    .prettyPeek()
+                    .then()
+                    .statusCode(200);
         }
-
-        when()
-                .delete("products/{id}", id)
-                .prettyPeek()
-                .then()
-                .statusCode(200);
     }
 }
