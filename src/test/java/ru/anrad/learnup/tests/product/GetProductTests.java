@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.anrad.learnup.Endpoints.*;
 import static ru.anrad.learnup.enams.ProductList.BANANA;
+import static ru.anrad.learnup.enams.ProductList.BREAD;
 
 public class GetProductTests extends BaseTests {
 
@@ -21,7 +22,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
-    void getProductPositiveTest() {
+    void getProductPositiveProductIsBananaTest() {
         Product response = given()
                 .when()
                 .get(GET_PRODUCT_ENDPOINT, BANANA.getId())
@@ -32,6 +33,20 @@ public class GetProductTests extends BaseTests {
         assertThat(response.getTitle(), equalTo(BANANA.getTitle()));
         assertThat(response.getPrice(), equalTo(BANANA.getPrice()));
         assertThat(response.getCategoryTitle(), equalTo(BANANA.getCategory()));
+    }
+
+    @Test
+    void getProductPositiveProductIsBreadTest() {
+        Product response = given()
+                .when()
+                .get(GET_PRODUCT_ENDPOINT, BREAD.getId())
+                .prettyPeek()
+                .body()
+                .as(Product.class);
+        assertThat(response.getId(), equalTo(BREAD.getId()));
+        assertThat(response.getTitle(), equalTo(BREAD.getTitle()));
+        assertThat(response.getPrice(), equalTo(BREAD.getPrice()));
+        assertThat(response.getCategoryTitle(), equalTo(BREAD.getCategory()));
     }
 
     @Test
@@ -81,6 +96,26 @@ public class GetProductTests extends BaseTests {
                 .spec(badReqResponseSpecification)
                 .when()
                 .get(GET_PRODUCT_ENDPOINT, RATIONAL_NUM_COMMA)
+                .prettyPeek();
+    }
+
+    @Test
+    void getProductNegativeSQLInjectionCommentTest() {
+        given()
+                .response()
+                .spec(badReqResponseSpecification)
+                .when()
+                .get(GET_PRODUCT_ENDPOINT, SQL_COMMENT)
+                .prettyPeek();
+    }
+
+    @Test
+    void getProductNegativeXSSTest() {
+        given()
+                .response()
+                .spec(badReqResponseSpecification)
+                .when()
+                .get(GET_PRODUCT_ENDPOINT, XSS_STRING)
                 .prettyPeek();
     }
 }

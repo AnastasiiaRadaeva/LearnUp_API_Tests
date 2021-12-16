@@ -22,13 +22,15 @@ public class PutProductTests extends BaseTests {
                 .title(CHANGED_BREAD.getTitle())
                 .categoryTitle(CHANGED_BREAD.getCategory())
                 .build();
+
+        requestSpecification
+                .body(product)
+                .contentType(HEADER_CT);
     }
 
     @Test
     void putProductPositiveTest() {
         Product response = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .when()
                 .put(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
@@ -43,9 +45,9 @@ public class PutProductTests extends BaseTests {
 
     @Test
     void putProductNegativeProductIsWrongStructureTest() {
+        requestSpecification.body(LETTERS_STRING);
+
         given()
-                .body(LETTERS_STRING)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -56,9 +58,9 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativeIdIsNotExistTest() {
         product.setId(POSITIVE_NUM);
+        requestSpecification.body(product);
+
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -71,10 +73,9 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativeTitleIsNullTest() {
         product.setTitle(null);
+        requestSpecification.body(product);
 
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -87,10 +88,9 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativeTitleIsEmptyTest() {
         product.setTitle(EMPTY_STRING);
+        requestSpecification.body(product);
 
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -103,10 +103,9 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativePriceIsNullTest() {
         product.setPrice(null);
+        requestSpecification.body(product);
 
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -119,10 +118,9 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativePriceIsNegativeTest() {
         product.setPrice(NEGATIVE_NUM);
+        requestSpecification.body(product);
 
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -135,10 +133,9 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativeCategoryIsNullTest() {
         product.setCategoryTitle(null);
+        requestSpecification.body(product);
 
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()
@@ -151,10 +148,24 @@ public class PutProductTests extends BaseTests {
     @Test
     void putProductNegativeCategoryIsNotExistTest() {
         product.setCategoryTitle(LETTERS_STRING);
+        requestSpecification.body(product);
 
         id = given()
-                .body(product)
-                .header(HEADER_CT_NAME, HEADER_CT)
+                .response()
+                .spec(badReqResponseSpecification)
+                .when()
+                .put(POST_PRODUCT_ENDPOINT)
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void putProductNegativeXSSTest() {
+        product.setTitle(XSS_STRING);
+        requestSpecification.body(product);
+
+        id = given()
                 .response()
                 .spec(badReqResponseSpecification)
                 .when()

@@ -8,12 +8,13 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.anrad.learnup.Endpoints.*;
+import static ru.anrad.learnup.enams.CategoryType.ELECTRONIC;
 import static ru.anrad.learnup.enams.CategoryType.FOOD;
 
 public class CategoryTests extends BaseTests {
 
     @Test
-    void getCategoryPositiveIdIsExistsTest() {
+    void getCategoryPositiveIdIsFoodTest() {
         Category response = given()
                 .when()
                 .get(CATEGORY_ENDPOINT, FOOD.getId())
@@ -23,6 +24,20 @@ public class CategoryTests extends BaseTests {
         assertThat(response.getTitle(), equalTo(FOOD.getName()));
         response.getProducts().forEach(
                 e -> assertThat(e.getCategoryTitle(), equalTo(FOOD.getName()))
+        );
+    }
+
+    @Test
+    void getCategoryPositiveIdIsElectronicTest() {
+        Category response = given()
+                .when()
+                .get(CATEGORY_ENDPOINT, ELECTRONIC.getId())
+                .prettyPeek()
+                .body().as(Category.class);
+        assertThat(response.getId(), equalTo(ELECTRONIC.getId()));
+        assertThat(response.getTitle(), equalTo(ELECTRONIC.getName()));
+        response.getProducts().forEach(
+                e -> assertThat(e.getCategoryTitle(), equalTo(ELECTRONIC.getName()))
         );
     }
 
@@ -71,6 +86,26 @@ public class CategoryTests extends BaseTests {
                 .spec(badReqResponseSpecification)
                 .when()
                 .get(CATEGORY_ENDPOINT, LETTERS_STRING)
+                .prettyPeek();
+    }
+
+    @Test
+    void getCategoryNegativeSQLInjectionCommentTest() {
+        given()
+                .response()
+                .spec(badReqResponseSpecification)
+                .when()
+                .get(CATEGORY_ENDPOINT, SQL_COMMENT)
+                .prettyPeek();
+    }
+
+    @Test
+    void getCategoryNegativeXSSTest() {
+        given()
+                .response()
+                .spec(badReqResponseSpecification)
+                .when()
+                .get(CATEGORY_ENDPOINT, XSS_STRING)
                 .prettyPeek();
     }
 }

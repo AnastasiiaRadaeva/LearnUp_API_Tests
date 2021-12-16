@@ -13,8 +13,9 @@ public class Endpoints {
     public static final String RATIONAL_NUM_POINT = "8.9";
     public static final String RATIONAL_NUM_COMMA = "8,9";
     public static final String LETTERS_STRING = "string";
+    public static final String SQL_COMMENT = "1 -- hello";
+    public static final String XSS_STRING = "<script>alert(Hello, World!)</script>";
 
-    public static final String HEADER_CT_NAME = "Content-Type";
     public static final String HEADER_CT = "application/json";
 
 }

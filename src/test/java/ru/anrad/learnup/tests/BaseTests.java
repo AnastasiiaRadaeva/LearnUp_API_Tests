@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.lessThan;
 public abstract class BaseTests {
 
     static Properties properties = new Properties();
-    static RequestSpecification requestSpecification;
+    protected static RequestSpecification requestSpecification;
     static ResponseSpecification responseSpecification;
     protected static ResponseSpecification badReqResponseSpecification;
     protected static ResponseSpecification notFoundResponseSpecification;
