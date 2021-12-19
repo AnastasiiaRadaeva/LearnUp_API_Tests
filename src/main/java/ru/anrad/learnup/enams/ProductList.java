@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum ProductList {
     BANANA(17700, "Banana", 0, "Food"),
-    BREAD(18676, "Bread", 300, "Food"),
+    BREAD(18726, "Bread", 300, "Food"),
     CHANGED_BREAD(18676, "Black Bread", 200, "Food"),
     NEW_PRODUCT(0, "", 500, "Food");
 

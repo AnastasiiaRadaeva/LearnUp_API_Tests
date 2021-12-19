@@ -17,6 +17,7 @@
         <slf4j.version>1.7.32</slf4j.version>
         <rest-assured.version>4.4.0</rest-assured.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
+        <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
     </properties>
 
     <dependencies>
@@ -62,6 +63,11 @@
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>${javafaker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>java-hamcrest</artifactId>
+            <version>${java-hamcrest.version}</version>
         </dependency>
     </dependencies>
 

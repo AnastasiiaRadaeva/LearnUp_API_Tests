@@ -5,9 +5,8 @@ import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static ru.anrad.learnup.Endpoints.*;
+import static ru.anrad.learnup.asserts.CommonAsserts.putProductPositiveAsserts;
 import static ru.anrad.learnup.enams.ProductList.CHANGED_BREAD;
 
 public class PutProductTests extends BaseTests {
@@ -36,11 +35,7 @@ public class PutProductTests extends BaseTests {
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        id = response.getId();
-        assertThat(response.getId(), is(not(nullValue())));
-        assertThat(response.getTitle(), equalTo(product.getTitle()));
-        assertThat(response.getPrice(), equalTo(product.getPrice()));
-        assertThat(response.getCategoryTitle(), equalTo(product.getCategoryTitle()));
+        id = putProductPositiveAsserts(response, product);
     }
 
     @Test

@@ -5,9 +5,8 @@ import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.anrad.learnup.Endpoints.*;
+import static ru.anrad.learnup.asserts.CommonAsserts.getProductPositiveAsserts;
 import static ru.anrad.learnup.enams.ProductList.BANANA;
 import static ru.anrad.learnup.enams.ProductList.BREAD;
 
@@ -29,10 +28,7 @@ public class GetProductTests extends BaseTests {
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        assertThat(response.getId(), equalTo(BANANA.getId()));
-        assertThat(response.getTitle(), equalTo(BANANA.getTitle()));
-        assertThat(response.getPrice(), equalTo(BANANA.getPrice()));
-        assertThat(response.getCategoryTitle(), equalTo(BANANA.getCategory()));
+        getProductPositiveAsserts(response, BANANA);
     }
 
     @Test
@@ -43,10 +39,7 @@ public class GetProductTests extends BaseTests {
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        assertThat(response.getId(), equalTo(BREAD.getId()));
-        assertThat(response.getTitle(), equalTo(BREAD.getTitle()));
-        assertThat(response.getPrice(), equalTo(BREAD.getPrice()));
-        assertThat(response.getCategoryTitle(), equalTo(BREAD.getCategory()));
+        getProductPositiveAsserts(response, BREAD);
     }
 
     @Test
