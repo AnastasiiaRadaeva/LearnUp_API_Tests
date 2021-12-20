@@ -1,5 +1,6 @@
 package ru.anrad.learnup.tests;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -14,6 +15,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
 import static org.hamcrest.Matchers.lessThan;
 
 public abstract class BaseTests {
@@ -29,8 +31,11 @@ public abstract class BaseTests {
     @SneakyThrows
     @BeforeAll
     static void beforeAll(){
+        RestAssured.filters(new AllureRestAssured());
         properties.load(new FileInputStream("src/test/resources/application.properties"));
         RestAssured.baseURI = properties.getProperty("baseURL");
+
+//        setAllureEnvironment();
 
         requestSpecification = new RequestSpecBuilder()
                 .log(LogDetail.METHOD)
