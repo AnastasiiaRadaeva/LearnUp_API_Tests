@@ -1,5 +1,7 @@
 package ru.anrad.learnup.tests.product;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.*;
 import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
@@ -9,6 +11,8 @@ import static ru.anrad.learnup.Endpoints.*;
 import static ru.anrad.learnup.asserts.CommonAsserts.putProductPositiveAsserts;
 import static ru.anrad.learnup.enams.ProductList.CHANGED_BREAD;
 
+@Epic("Tests for products")
+@Story("Put Product tests")
 public class PutProductTests extends BaseTests {
     static Product product;
     Integer id;

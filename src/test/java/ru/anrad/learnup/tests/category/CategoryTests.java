@@ -3,6 +3,7 @@ package ru.anrad.learnup.tests.category;
 import org.junit.jupiter.api.Test;
 import ru.anrad.learnup.dto.Category;
 import ru.anrad.learnup.tests.BaseTests;
+import io.qameta.allure.*;
 
 import static io.restassured.RestAssured.given;
 import static ru.anrad.learnup.Endpoints.*;
@@ -10,9 +11,13 @@ import static ru.anrad.learnup.asserts.CommonAsserts.getCategoryPositiveAsserts;
 import static ru.anrad.learnup.enams.CategoryType.ELECTRONIC;
 import static ru.anrad.learnup.enams.CategoryType.FOOD;
 
+@Epic("Tests for categories")
+@Story("Get Category tests")
+@Severity(SeverityLevel.NORMAL)
 public class CategoryTests extends BaseTests {
 
     @Test
+    @Description("Получить категорию Food")
     void getCategoryPositiveIdIsFoodTest() {
         Category response = given()
                 .when()
@@ -23,6 +28,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить категорию Electronic")
     void getCategoryPositiveIdIsElectronicTest() {
         Category response = given()
                 .when()
@@ -33,6 +39,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить категорию по пустой строке")
     void getCategoryNegativeIdIsEmptyTest() {
         given()
                 .response()
@@ -43,6 +50,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить категорию с негативным id")
     void getCategoryNegativeIdIsNegativeTest() {
         given()
                 .response()
@@ -53,6 +61,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить категорию дробным id (через точку)")
     void getCategoryNegativeIdIsRationalPointTest() {
         given()
                 .response()
@@ -63,6 +72,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить категорию дробным id (через запятую)")
     void getCategoryNegativeIdIsRationalCommaTest() {
         given()
                 .response()
@@ -73,6 +83,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить категорию буквенным id")
     void getCategoryNegativeIdIsLettersTest() {
         given()
                 .response()

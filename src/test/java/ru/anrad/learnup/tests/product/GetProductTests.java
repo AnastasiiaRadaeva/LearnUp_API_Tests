@@ -1,5 +1,7 @@
 package ru.anrad.learnup.tests.product;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
@@ -10,6 +12,8 @@ import static ru.anrad.learnup.asserts.CommonAsserts.getProductPositiveAsserts;
 import static ru.anrad.learnup.enams.ProductList.BANANA;
 import static ru.anrad.learnup.enams.ProductList.BREAD;
 
+@Epic("Tests for products")
+@Story("Get Product tests")
 public class GetProductTests extends BaseTests {
 
     @Test

@@ -1,5 +1,7 @@
 package ru.anrad.learnup.tests.product;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.*;
 import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
@@ -11,7 +13,8 @@ import static ru.anrad.learnup.enams.ProductList.NEW_PRODUCT;
 
 import com.github.javafaker.Faker;
 
-
+@Epic("Tests for products")
+@Story("Post Product tests")
 public class PostProductTests extends BaseTests {
     Faker faker = new Faker();
     static Product product;

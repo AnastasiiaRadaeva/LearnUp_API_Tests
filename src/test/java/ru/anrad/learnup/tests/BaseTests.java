@@ -1,5 +1,6 @@
 package ru.anrad.learnup.tests;
 
+import com.google.common.collect.ImmutableMap;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -34,8 +35,7 @@ public abstract class BaseTests {
         RestAssured.filters(new AllureRestAssured());
         properties.load(new FileInputStream("src/test/resources/application.properties"));
         RestAssured.baseURI = properties.getProperty("baseURL");
-
-//        setAllureEnvironment();
+        setAllureEnvironment();
 
         requestSpecification = new RequestSpecBuilder()
                 .log(LogDetail.METHOD)
@@ -47,7 +47,7 @@ public abstract class BaseTests {
 
         responseSpecification = new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
-                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
+//                .expectResponseTime(lessThan(1000L), TimeUnit.MILLISECONDS)
                 .expectStatusCode(200)
                 .expectStatusLine("HTTP/1.1 200 ")
                 .build();
@@ -77,6 +77,13 @@ public abstract class BaseTests {
                 .expectStatusCode(200)
                 .expectContentType("")
                 .build();
+    }
+
+    public static void setAllureEnvironment(){
+        allureEnvironmentWriter(
+                ImmutableMap.<String, String>builder()
+                        .put("URL", properties.getProperty("baseURL"))
+                        .build());
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.anrad.learnup.asserts;
 
+import io.qameta.allure.Step;
 import lombok.experimental.UtilityClass;
 import ru.anrad.learnup.dto.Category;
 import ru.anrad.learnup.dto.Product;
@@ -12,6 +13,7 @@ import static ru.anrad.learnup.asserts.IsCategoryExists.isCategoryExists;
 
 @UtilityClass
 public class CommonAsserts {
+    @Step("Проверка совпадения категории")
     public void getCategoryPositiveAsserts(Category response, CategoryType category) {
         assertThat(response.getId(), equalTo(category.getId()));
         assertThat(response.getTitle(), equalTo(category.getName()));
