@@ -1,7 +1,6 @@
 package ru.anrad.learnup.tests.product;
 
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
@@ -13,6 +12,7 @@ import static ru.anrad.learnup.enams.ProductList.CHANGED_BREAD;
 
 @Epic("Tests for products")
 @Story("Put Product tests")
+@Severity(SeverityLevel.NORMAL)
 public class PutProductTests extends BaseTests {
     static Product product;
     Integer id;
@@ -32,6 +32,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на CHANGED_BREAD")
     void putProductPositiveTest() {
         Product response = given()
                 .when()
@@ -43,6 +44,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт со строковой структурой")
     void putProductNegativeProductIsWrongStructureTest() {
         requestSpecification.body(LETTERS_STRING);
 
@@ -55,6 +57,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить несуществующий продукт (id не существует)")
     void putProductNegativeIdIsNotExistTest() {
         product.setId(POSITIVE_NUM);
         requestSpecification.body(product);
@@ -70,6 +73,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт с названием = null")
     void putProductNegativeTitleIsNullTest() {
         product.setTitle(null);
         requestSpecification.body(product);
@@ -85,6 +89,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт с пустым названием")
     void putProductNegativeTitleIsEmptyTest() {
         product.setTitle(EMPTY_STRING);
         requestSpecification.body(product);
@@ -100,6 +105,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт ценой = null")
     void putProductNegativePriceIsNullTest() {
         product.setPrice(null);
         requestSpecification.body(product);
@@ -115,6 +121,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт с отрицательнйо ценой")
     void putProductNegativePriceIsNegativeTest() {
         product.setPrice(NEGATIVE_NUM);
         requestSpecification.body(product);
@@ -130,6 +137,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт с категорией = null")
     void putProductNegativeCategoryIsNullTest() {
         product.setCategoryTitle(null);
         requestSpecification.body(product);
@@ -145,6 +153,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Изменить существующий продукт на продукт с несуществующей категорией")
     void putProductNegativeCategoryIsNotExistTest() {
         product.setCategoryTitle(LETTERS_STRING);
         requestSpecification.body(product);
@@ -160,6 +169,8 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Проверка на XSS уязвимость - id с js кодом")
+    @Severity(SeverityLevel.CRITICAL)
     void putProductNegativeXSSTest() {
         product.setTitle(XSS_STRING);
         requestSpecification.body(product);
@@ -175,6 +186,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @AfterEach
+    @Step("Проверка наличия продукта в базе")
     void checkProduct(TestInfo testInfo) {
         if (id != null) {
             given()

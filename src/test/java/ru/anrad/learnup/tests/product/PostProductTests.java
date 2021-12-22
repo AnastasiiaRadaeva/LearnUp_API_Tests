@@ -1,7 +1,6 @@
 package ru.anrad.learnup.tests.product;
 
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
@@ -15,6 +14,7 @@ import com.github.javafaker.Faker;
 
 @Epic("Tests for products")
 @Story("Post Product tests")
+@Severity(SeverityLevel.NORMAL)
 public class PostProductTests extends BaseTests {
     Faker faker = new Faker();
     static Product product;
@@ -35,6 +35,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт")
     void postProductPositiveTest() {
         Product response = given()
                 .response()
@@ -48,6 +49,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт со структурой - строка")
     void postProductNegativeProductIsWrongStructureTest() {
         requestSpecification.body(LETTERS_STRING);
 
@@ -60,6 +62,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с id != null")
     void postProductNegativeIdIsNotNullTest() {
         product.setId(POSITIVE_NUM);
         requestSpecification.body(product);
@@ -75,6 +78,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с названием = null")
     void postProductNegativeTitleIsNullTest() {
         product.setTitle(null);
         requestSpecification.body(product);
@@ -90,6 +94,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с пустым названием")
     void postProductNegativeTitleIsEmptyTest() {
         product.setTitle(EMPTY_STRING);
         requestSpecification.body(product);
@@ -105,6 +110,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с ценой = null")
     void postProductNegativePriceIsNullTest() {
         product.setPrice(null);
         requestSpecification.body(product);
@@ -120,6 +126,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с отрицательной ценой")
     void postProductNegativePriceIsNegativeTest() {
         product.setPrice(NEGATIVE_NUM);
         requestSpecification.body(product);
@@ -135,6 +142,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с категорией = null")
     void postProductNegativeCategoryIsNullTest() {
         product.setCategoryTitle(null);
         requestSpecification.body(product);
@@ -150,6 +158,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Создать новый продукт с несуществующей категорией")
     void postProductNegativeCategoryIsNotExistTest() {
         product.setCategoryTitle(LETTERS_STRING);
         requestSpecification.body(product);
@@ -165,6 +174,8 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Проверка на XSS уязвимость - id с js кодом")
+    @Severity(SeverityLevel.CRITICAL)
     void postProductNegativeXSSTest() {
         product.setTitle(XSS_STRING);
         requestSpecification.body(product);
@@ -180,6 +191,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @AfterEach
+    @Step("Удаление созданного продукта")
     void tearDown(TestInfo testInfo) {
         if (id != null) {
             given()

@@ -13,7 +13,7 @@ import static ru.anrad.learnup.asserts.IsCategoryExists.isCategoryExists;
 
 @UtilityClass
 public class CommonAsserts {
-    @Step("Проверка совпадения категории")
+    @Step("Проверка соответствия полученной категории запрашиваемой")
     public void getCategoryPositiveAsserts(Category response, CategoryType category) {
         assertThat(response.getId(), equalTo(category.getId()));
         assertThat(response.getTitle(), equalTo(category.getName()));
@@ -25,6 +25,7 @@ public class CommonAsserts {
         );
     }
 
+    @Step("Проверка соответствия полученного продукта запрашиваемому")
     public void getProductPositiveAsserts(Product response, ProductList product) {
         assertThat(response.getId(), equalTo(product.getId()));
         assertThat(response.getTitle(), equalTo(product.getTitle()));
@@ -32,6 +33,7 @@ public class CommonAsserts {
         assertThat(response.getCategoryTitle(), equalTo(product.getCategory()));
     }
 
+    @Step("Проверка соответствия созданного продукта поданному в запросе")
     public Integer postProductPositiveAsserts(Product response, Product product) {
         Integer id = response.getId();
         assertThat(response.getId(), is(not(nullValue())));
@@ -41,6 +43,7 @@ public class CommonAsserts {
         return id;
     }
 
+    @Step("Проверка соответствия измененного продукта поданному в запросе")
     public Integer putProductPositiveAsserts(Product response, Product product) {
         Integer id = response.getId();
         assertThat(response.getId(), equalTo(product.getId()));

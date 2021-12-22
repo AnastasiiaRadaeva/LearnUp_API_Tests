@@ -13,7 +13,7 @@ import static ru.anrad.learnup.enams.CategoryType.FOOD;
 
 @Epic("Tests for categories")
 @Story("Get Category tests")
-@Severity(SeverityLevel.NORMAL)
+@Severity(SeverityLevel.MINOR)
 public class CategoryTests extends BaseTests {
 
     @Test
@@ -39,7 +39,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
-    @Description("Получить категорию по пустой строке")
+    @Description("Получить категорию по id - пустая строка")
     void getCategoryNegativeIdIsEmptyTest() {
         given()
                 .response()
@@ -83,7 +83,7 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
-    @Description("Получить категорию буквенным id")
+    @Description("Получить категорию с буквенным id")
     void getCategoryNegativeIdIsLettersTest() {
         given()
                 .response()
@@ -94,6 +94,8 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Проверка на SQL-инъекции - id с SQL комментарием")
+    @Severity(SeverityLevel.CRITICAL)
     void getCategoryNegativeSQLInjectionCommentTest() {
         given()
                 .response()
@@ -104,6 +106,8 @@ public class CategoryTests extends BaseTests {
     }
 
     @Test
+    @Description("Проверка на XSS уязвимость - id с js кодом")
+    @Severity(SeverityLevel.CRITICAL)
     void getCategoryNegativeXSSTest() {
         given()
                 .response()

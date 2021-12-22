@@ -1,7 +1,6 @@
 package ru.anrad.learnup.tests.product;
 
-import io.qameta.allure.Epic;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import ru.anrad.learnup.dto.Product;
 import ru.anrad.learnup.tests.BaseTests;
@@ -14,9 +13,11 @@ import static ru.anrad.learnup.enams.ProductList.BREAD;
 
 @Epic("Tests for products")
 @Story("Get Product tests")
+@Severity(SeverityLevel.NORMAL)
 public class GetProductTests extends BaseTests {
 
     @Test
+    @Description("Получить все продукты")
     void getAllProductsPositiveTest() {
         given()
                 .when()
@@ -25,6 +26,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить продукт BANANA")
     void getProductPositiveProductIsBananaTest() {
         Product response = given()
                 .when()
@@ -36,6 +38,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить продукт BREAD")
     void getProductPositiveProductIsBreadTest() {
         Product response = given()
                 .when()
@@ -47,6 +50,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить несуществующий продукт")
     void getProductNegativeIdIsNotExistedTest() {
         given()
                 .response()
@@ -57,6 +61,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить продукт с буквенным id")
     void getProductNegativeIdIsSymbolTest() {
         given()
                 .response()
@@ -67,6 +72,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить продукт с отрицательным id")
     void getProductNegativeIdIsNegativeTest() {
         given()
                 .response()
@@ -77,6 +83,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить продукт с дробным id (через точку)")
     void getProductNegativeIdIsRationalWithPointTest() {
         given()
                 .response()
@@ -87,6 +94,7 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Получить продукт с дробным id (через запятую)")
     void getProductNegativeIdIsRationalWithCommaTest() {
         given()
                 .response()
@@ -97,6 +105,8 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Проверка на SQL-инъекции - id с SQL комментарием")
+    @Severity(SeverityLevel.CRITICAL)
     void getProductNegativeSQLInjectionCommentTest() {
         given()
                 .response()
@@ -107,6 +117,8 @@ public class GetProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Проверка на XSS уязвимость - id с js кодом")
+    @Severity(SeverityLevel.CRITICAL)
     void getProductNegativeXSSTest() {
         given()
                 .response()

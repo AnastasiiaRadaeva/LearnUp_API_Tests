@@ -1,5 +1,6 @@
 package ru.anrad.learnup.asserts;
 
+import io.qameta.allure.Step;
 import lombok.NoArgsConstructor;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
