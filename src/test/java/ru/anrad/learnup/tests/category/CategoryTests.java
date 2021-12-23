@@ -8,8 +8,8 @@ import io.qameta.allure.*;
 import static io.restassured.RestAssured.given;
 import static ru.anrad.learnup.Endpoints.*;
 import static ru.anrad.learnup.asserts.CommonAsserts.getCategoryPositiveAsserts;
-import static ru.anrad.learnup.enams.CategoryType.ELECTRONIC;
-import static ru.anrad.learnup.enams.CategoryType.FOOD;
+import static ru.anrad.learnup.Endpoints.ELECTRONIC_ID;
+import static ru.anrad.learnup.Endpoints.FOOD_ID;
 
 @Epic("Tests for categories")
 @Story("Get Category tests")
@@ -21,10 +21,10 @@ public class CategoryTests extends BaseTests {
     void getCategoryPositiveIdIsFoodTest() {
         Category response = given()
                 .when()
-                .get(CATEGORY_ENDPOINT, FOOD.getId())
+                .get(CATEGORY_ENDPOINT, FOOD_ID)
                 .prettyPeek()
                 .body().as(Category.class);
-        getCategoryPositiveAsserts(response, FOOD);
+        getCategoryPositiveAsserts(response, categoriesMapper.selectByPrimaryKey(FOOD_ID));
     }
 
     @Test
@@ -32,10 +32,10 @@ public class CategoryTests extends BaseTests {
     void getCategoryPositiveIdIsElectronicTest() {
         Category response = given()
                 .when()
-                .get(CATEGORY_ENDPOINT, ELECTRONIC.getId())
+                .get(CATEGORY_ENDPOINT, ELECTRONIC_ID)
                 .prettyPeek()
                 .body().as(Category.class);
-        getCategoryPositiveAsserts(response, ELECTRONIC);
+        getCategoryPositiveAsserts(response, categoriesMapper.selectByPrimaryKey(ELECTRONIC_ID));
     }
 
     @Test

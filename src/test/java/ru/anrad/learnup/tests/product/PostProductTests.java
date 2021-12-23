@@ -45,7 +45,7 @@ public class PostProductTests extends BaseTests {
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        id = postProductPositiveAsserts(response, product);
+        id = postProductPositiveAsserts(response, product, productsMapper, categoriesMapper);
     }
 
     @Test
@@ -192,14 +192,9 @@ public class PostProductTests extends BaseTests {
 
     @AfterEach
     @Step("Удаление созданного продукта")
-    void tearDown(TestInfo testInfo) {
+    void tearDown() {
         if (id != null) {
-            given()
-                    .response()
-                    .spec(deleteResponseSpecification)
-                    .when()
-                    .delete(GET_PRODUCT_ENDPOINT, id)
-                    .prettyPeek();
+            productsMapper.deleteByPrimaryKey(id.longValue());
         }
     }
 }

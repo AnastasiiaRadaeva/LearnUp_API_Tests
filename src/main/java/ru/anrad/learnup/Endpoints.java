@@ -18,4 +18,11 @@ public class Endpoints {
 
     public static final String HEADER_CT = "application/json";
 
+    //Category types id
+    public static Integer FOOD_ID = 1;
+    public static Integer ELECTRONIC_ID = 2;
+    //Products id
+    public static Integer BANANA_ID = 17700;
+    public static Integer BREAD_ID = 18726;
+
 }

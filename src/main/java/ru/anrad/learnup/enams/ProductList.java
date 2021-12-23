@@ -3,9 +3,7 @@ package ru.anrad.learnup.enams;
 import lombok.Getter;
 
 public enum ProductList {
-    BANANA(17700, "Banana", 0, "Food"),
-    BREAD(18726, "Bread", 300, "Food"),
-    CHANGED_BREAD(18676, "Black Bread", 200, "Food"),
+    CHANGED_BREAD(0, "Black Bread", 200, "Electronic"),
     NEW_PRODUCT(0, "", 500, "Food");
 
     @Getter

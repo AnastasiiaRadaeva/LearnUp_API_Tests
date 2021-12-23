@@ -11,13 +11,14 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
+import ru.anrad.learnup.db.dao.CategoriesMapper;
+import ru.anrad.learnup.db.dao.ProductsMapper;
+import ru.anrad.learnup.utils.DBUtils;
 
 import java.io.FileInputStream;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
-import static org.hamcrest.Matchers.lessThan;
 
 public abstract class BaseTests {
 
@@ -28,6 +29,8 @@ public abstract class BaseTests {
     protected static ResponseSpecification notFoundResponseSpecification;
     protected static ResponseSpecification createdResponseSpecification;
     protected static ResponseSpecification deleteResponseSpecification;
+    protected static ProductsMapper productsMapper;
+    protected static CategoriesMapper categoriesMapper;
 
     @SneakyThrows
     @BeforeAll
@@ -55,28 +58,31 @@ public abstract class BaseTests {
 
         badReqResponseSpecification = new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
-                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
+//                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
                 .expectStatusCode(400)
                 .expectStatusLine("HTTP/1.1 400 ")
                 .build();
         notFoundResponseSpecification = new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
-                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
+//                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
                 .expectStatusCode(404)
                 .expectStatusLine("HTTP/1.1 404 ")
                 .build();
         createdResponseSpecification = new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
-                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
+//                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
                 .expectStatusCode(201)
                 .expectStatusLine("HTTP/1.1 201 ")
                 .build();
         deleteResponseSpecification = new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
-                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
+//                .expectResponseTime(lessThan(900L), TimeUnit.MILLISECONDS)
                 .expectStatusCode(200)
                 .expectContentType("")
                 .build();
+
+        productsMapper = DBUtils.getProductsMapper();
+        categoriesMapper = DBUtils.getCategoryMapper();
     }
 
     public static void setAllureEnvironment(){
@@ -85,5 +91,4 @@ public abstract class BaseTests {
                         .put("URL", properties.getProperty("baseURL"))
                         .build());
     }
-
 }

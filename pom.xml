@@ -23,6 +23,7 @@
         <aspectj.version>1.9.6</aspectj.version>
         <mybatis.version>3.5.8</mybatis.version>
         <postgresql.version>42.3.1</postgresql.version>
+        <mybatis-generator-maven.version>1.4.0</mybatis-generator-maven.version>
     </properties>
 
     <build>
@@ -66,7 +67,35 @@
                     <reportVersion>2.17.1</reportVersion>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${mybatis-generator-maven.version}</version>
+                <executions>
+                    <execution>
+                        <id>Generate MyBatis Artifacts</id>
+                        <goals>
+                            <!--                            disabled generation mybatis db provider-->
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>
@@ -157,8 +186,6 @@
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
-
-
     </dependencies>
 
 </project>

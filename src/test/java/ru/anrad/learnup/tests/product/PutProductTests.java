@@ -20,7 +20,7 @@ public class PutProductTests extends BaseTests {
     @BeforeEach
     void init_product() {
         product = Product.builder()
-                .id(CHANGED_BREAD.getId())
+                .id(BREAD_ID)
                 .price(CHANGED_BREAD.getPrice())
                 .title(CHANGED_BREAD.getTitle())
                 .categoryTitle(CHANGED_BREAD.getCategory())
@@ -40,7 +40,7 @@ public class PutProductTests extends BaseTests {
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        id = putProductPositiveAsserts(response, product);
+        id = putProductPositiveAsserts(response, product, productsMapper, categoriesMapper);
     }
 
     @Test
@@ -183,16 +183,5 @@ public class PutProductTests extends BaseTests {
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
-    }
-
-    @AfterEach
-    @Step("Проверка наличия продукта в базе")
-    void checkProduct(TestInfo testInfo) {
-        if (id != null) {
-            given()
-                    .when()
-                    .get(GET_PRODUCT_ENDPOINT, id)
-                    .prettyPeek();
-        }
     }
 }

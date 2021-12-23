@@ -8,8 +8,8 @@ import ru.anrad.learnup.tests.BaseTests;
 import static io.restassured.RestAssured.given;
 import static ru.anrad.learnup.Endpoints.*;
 import static ru.anrad.learnup.asserts.CommonAsserts.getProductPositiveAsserts;
-import static ru.anrad.learnup.enams.ProductList.BANANA;
-import static ru.anrad.learnup.enams.ProductList.BREAD;
+import static ru.anrad.learnup.Endpoints.BANANA_ID;
+import static ru.anrad.learnup.Endpoints.BREAD_ID;
 
 @Epic("Tests for products")
 @Story("Get Product tests")
@@ -30,11 +30,11 @@ public class GetProductTests extends BaseTests {
     void getProductPositiveProductIsBananaTest() {
         Product response = given()
                 .when()
-                .get(GET_PRODUCT_ENDPOINT, BANANA.getId())
+                .get(GET_PRODUCT_ENDPOINT, BANANA_ID)
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        getProductPositiveAsserts(response, BANANA);
+        getProductPositiveAsserts(response, productsMapper.selectByPrimaryKey(Long.valueOf(BANANA_ID)), categoriesMapper);
     }
 
     @Test
@@ -42,11 +42,11 @@ public class GetProductTests extends BaseTests {
     void getProductPositiveProductIsBreadTest() {
         Product response = given()
                 .when()
-                .get(GET_PRODUCT_ENDPOINT, BREAD.getId())
+                .get(GET_PRODUCT_ENDPOINT, BREAD_ID)
                 .prettyPeek()
                 .body()
                 .as(Product.class);
-        getProductPositiveAsserts(response, BREAD);
+        getProductPositiveAsserts(response, productsMapper.selectByPrimaryKey(Long.valueOf(BREAD_ID)), categoriesMapper);
     }
 
     @Test
